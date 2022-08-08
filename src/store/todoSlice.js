@@ -40,9 +40,6 @@ export const todoSlice = createSlice({
                 deadlineTime: data.payload.taskDeadLine.toLocaleTimeString(),
                 isComplete: false
             }
-            /*state.templeForTask = state.todoLists.filter(list => {
-                return list.id === data.payload.idList;
-            })*/
             state.todoLists = state.todoLists.map(list => {
                 if (list.id === data.payload.idList) {
                     list.task.push(newTask)
@@ -50,7 +47,6 @@ export const todoSlice = createSlice({
                 return list;
             })
             console.log(state.todoLists);
-            //state.task = [...state.task, newTask];
         },
         deleteTask: (state, id) => {
             state.taskForSearch = [];
