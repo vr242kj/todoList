@@ -34,7 +34,7 @@ function TodoListForm() {
     return <Container maxWidth="sm" style={{marginTop: 5}}>
         <form onSubmit={handleSubmit}>
             <FormControl fullWidth={true}>
-                <TextField label = "My new task list" requiered={true} value={listName} onChange={e => setListName(e.target.value)}/>
+                <TextField label = "My new task list" requiered={true} value={listName} onChange={(e) => setListName(e.target.value)}/>
                {/* <TextField
                     fullWidth
                     id="title"

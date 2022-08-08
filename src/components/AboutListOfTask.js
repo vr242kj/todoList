@@ -11,12 +11,12 @@ function AboutListOfTask() {
 
     useEffect(() => {
         dispatch(getListByID(id));
-        console.log(listById)
-    }, [id])
+    })
 
     return <>
-        <TodoCart key={listById.id} name={listById.name} idList={listById.id}/>
-        </>
+        {Object.keys(listById).length ? <TodoCart key={listById.id} name={listById.name} idList={listById.id}
+                                                  tasks={listById.task}/> : "No list with tis id"}
+    </>
 }
 
 export default AboutListOfTask;

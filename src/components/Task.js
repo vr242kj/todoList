@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import {
     Card,
     CardContent,
@@ -7,14 +7,10 @@ import {
     IconButton
 } from '@mui/material'
 import {Check, Delete} from '@mui/icons-material'
-import {useSelector, useDispatch} from 'react-redux'
+import {useDispatch} from 'react-redux'
 import {deleteTask, changeTaskStatus} from "../store/todoSlice";
 
 function Task({id, title, text, date, time, isComplete}){
-    //const taskTitle = useSelector(state => state.todo.taskTitle);
-    //const taskText = useSelector(state => state.todo.taskText);
-    //const taskDeadLine = useSelector(state => state.todo.taskDeadLine);
-    //const task = useSelector(state => state.todo.task);
     const dispatch = useDispatch()
 
     function changeStatusOfItem() {

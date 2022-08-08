@@ -13,7 +13,7 @@ import {styled} from '@mui/material/styles';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import TaskForm from "./TaskForm";
 import Task from "./Task";
-import {useSelector, useDispatch} from 'react-redux'
+import {useSelector} from 'react-redux'
 import {Link} from "react-router-dom";
 
 const ExpandMore = styled((props) => {
@@ -35,16 +35,10 @@ const Item = styled(Paper)(({theme}) => ({
     color: theme.palette.text.secondary,
 }));
 
-function TodoCart({idList, name}) {
+function TodoCart({idList, name, tasks}) {
     const [expanded, setExpanded] = useState(false);
-
-    const task = useSelector(state => state.todo.task);
-
     const taskForSearch = useSelector(state => state.todo.taskForSearch);
     const isSearchTaskFound = useSelector(state => state.todo.isSearchTaskFound);
-    const valueForSearch = useSelector(state => state.todo.valueForSearch);
-    const selectedStatus = useSelector(state => state.todo.selectedStatus);
-    const dispatch = useDispatch()
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
@@ -56,7 +50,7 @@ function TodoCart({idList, name}) {
                 <CardContent>
                     <Typography variant="h5" component="h2" align="center">
                         <Link to={'list/' + idList}>
-                        {name}
+                            {name}
                         </Link>
                     </Typography>
                 </CardContent>
@@ -73,7 +67,7 @@ function TodoCart({idList, name}) {
                 <Collapse in={expanded} timeout="auto" unmountOnExit>
                     <TaskForm idList={idList}/>
                     <CardContent>
-                        {isSearchTaskFound ? (taskForSearch.length ? taskForSearch : task).map(todo =>
+                        {isSearchTaskFound ? (taskForSearch.length ? taskForSearch : tasks).map(todo =>
                             <Task key={todo.id} id={todo.id} title={todo.title}
                                   text={todo.text} date={todo.deadlineDate}
                                   time={todo.deadlineTime} isComplete={todo.isComplete}
@@ -87,4 +81,3 @@ function TodoCart({idList, name}) {
 }
 
 export default TodoCart;
-

@@ -10,7 +10,9 @@ export const todoSlice = createSlice({
         isSearchTaskFound: true,
         valueForSearch: "",
         selectedStatus: "all",
-        listById: {}
+        listById: {},
+        templeForTask: [],
+        tasksForDisplay: null
     },
     reducers: {
         setTodoLists: (state, data) => {
@@ -21,12 +23,16 @@ export const todoSlice = createSlice({
                 id: uuid(),
                 name: data.payload,
                 isComplete: false,
-                task:[]
+                task: []
             }
             state.todoLists = [...state.todoLists, newToDo];
         },
         addTask: (state, data) => {
-            let newToDo = {
+            //state.isSearchTaskFound = true;
+            state.taskForSearch = []
+            state.valueForSearch = ""
+            state.selectedStatus = "all"
+            let newTask = {
                 id: uuid(),
                 title: data.payload.taskTitle,
                 text: data.payload.taskText,
@@ -34,31 +40,56 @@ export const todoSlice = createSlice({
                 deadlineTime: data.payload.taskDeadLine.toLocaleTimeString(),
                 isComplete: false
             }
-            state.task = [...state.task, newToDo];
+            /*state.templeForTask = state.todoLists.filter(list => {
+                return list.id === data.payload.idList;
+            })*/
+            state.todoLists = state.todoLists.map(list => {
+                if (list.id === data.payload.idList) {
+                    list.task.push(newTask)
+                }
+                return list;
+            })
+            console.log(state.todoLists);
+            //state.task = [...state.task, newTask];
         },
         deleteTask: (state, id) => {
             state.taskForSearch = [];
-            state.task = state.task.filter(todo => {
-                return todo.id !== id.payload;
+            state.todoLists = state.todoLists.map((item, index) => {
+                item.task.map((sItem, sIndex) => {
+                    if (sItem.id === id.payload) {
+                        item.task.splice(sIndex, 1)
+                    }
+                    return sItem;
+                })
+                return item;
             })
             state.valueForSearch = "";
             state.selectedStatus = "all";
         },
         changeTaskStatus: (state, id) => {
             state.taskForSearch = [];
-            state.task = state.task.map(todo => {
-                if (todo.id === id.payload) {
-                    todo.isComplete = !todo.isComplete;
-                }
-                return todo;
+            state.todoLists = state.todoLists.map((item, index) => {
+                item.task.map((sItem, sIndex) => {
+                    if (sItem.id === id.payload) {
+                        sItem.isComplete = !sItem.isComplete
+                    }
+                    return sItem;
+                })
+                return item;
             })
         },
-        searchTask: (state, e) => {
-            console.log(e.payload)
-            state.valueForSearch = e.payload.target.value
-            let search = e.payload.currentTarget.value.toLowerCase();
-            let foundProduct = state.task.filter(todo => todo.title.toLowerCase().includes(search) || todo.text.toLowerCase().includes(search));
+        searchTask: (state, event) => {
+            state.valueForSearch = event.payload.target.value
+            let search = event.payload.currentTarget.value.toLowerCase();
+            let foundProduct = [];
+            state.todoLists.forEach((item, index) => {
+                item.task.forEach((sItem, sIndex) => {
+                    if (sItem.title.toLowerCase().includes(search) || sItem.text.toLowerCase().includes(search))
+                        foundProduct.push(sItem)
+                })
+            })
             state.taskForSearch = foundProduct;
+
             if (!foundProduct.length) {
                 state.isSearchTaskFound = false;
                 return;
@@ -66,23 +97,31 @@ export const todoSlice = createSlice({
             state.isSearchTaskFound = true;
         },
         findAllTaskWithThisStatus: (state, status) => {
+            //state.isSearchTaskFound = true;
+            state.taskForSearch = []
             state.selectedStatus = status.payload;
-            state.isSearchTaskFound = true;
             if (status.payload === "all") {
+                state.isSearchTaskFound = true;
                 state.taskForSearch = [];
+                state.valueForSearch = ""
                 return;
             }
-            let foundProduct = state.task.filter(todo => {
-                return todo.isComplete === status.payload;
+            let foundProduct = [];
+            state.todoLists.forEach((item, index) => {
+                item.task.forEach((sItem, sIndex) => {
+                    if (sItem.isComplete === status.payload)
+                        foundProduct.push(sItem)
+                })
             })
             state.taskForSearch = foundProduct;
+
             if (!foundProduct.length) {
                 state.isSearchTaskFound = false;
                 return;
             }
         },
         getListByID: (state, id) => {
-            state.listById = state.todoLists.filter(list => list.id == id.payload)[0];
+            state.listById = state.todoLists.filter(list => list.id === id.payload)[0];
         }
     }
 })

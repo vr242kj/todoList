@@ -8,7 +8,7 @@ function TodoList() {
     return <>
         <TodoListForm />
         {todoLists.map((todoList) => (
-            <TodoCart key={todoList.id} name={todoList.name} idList={todoList.id}/>
+            <TodoCart key={todoList.id} name={todoList.name} idList={todoList.id} tasks={todoList.task}/>
         ))}
     </>
 }
