@@ -22,7 +22,6 @@ export const todoSlice = createSlice({
             let newToDo = {
                 id: uuid(),
                 name: data.payload,
-                isComplete: false,
                 task: []
             }
             state.todoLists = [...state.todoLists, newToDo];
